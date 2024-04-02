@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const User = require("./Models/user");
 const resisterRoute = require("./Routes/Auth");
+const jobRoute = require("./Routes/job")
 
 app.use(express.json());
 
@@ -40,6 +41,7 @@ app.get("/api/users", async (req, res) => {
 });
 
 app.use("/api/v1/auth",resisterRoute);
+app.use("/api/v1/job",jobRoute);
 
 app.listen(process.env.PORT || 3000, () => {
     db()

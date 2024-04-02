@@ -1,5 +1,6 @@
 const User = require("../Models/user");
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 
 const userRegistration = async (req,res)=>{
@@ -63,9 +64,11 @@ const userLogin = async (req,res)=>{
                 errorMessage: "Invalid credentials"
             })
         }
+        const token = jwt.sign({id:userDetails._id, name: userDetails.name}, process.env.JWT_SECRET)
         res.status(200).json({
-            message: "User logged in successfully"
-        })
+            message: "User logged in successfully",
+            token: token
+        },{expiresIn: "1h"})
     }catch (err) {
         res.status(500).json({
           message: "Internal Server Error",
