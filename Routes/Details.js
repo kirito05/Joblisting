@@ -19,9 +19,30 @@ router.get("/users", async (req, res) => {
 
 router.get("/jobs", async (req, res) => {
   try {
-    const title = req.query.jobTitle || "";
-    const jobs = await Job.find({title : {$regex: "jobTitle",$option:"i"}},{companyName:1, jobTile:1});
-    res.json(jobs);
+    const title = req.query.title;
+    const skills = req.query.skills;
+    let filter = {};
+    let filterSkills;
+    let titleFilter = {};
+
+
+    if (title) {
+      titleFilter = { title: { $regex: title, $options: "i" } };
+    }
+
+    if (skills) {
+      filterSkills = skills.split(",");
+      const caseInsensitiveFilteredSkills = filterSkills.map(
+        (element) => new RegExp(element, "i")
+      );
+      filter = { skills: { $in: caseInsensitiveFilteredSkills } };
+    }
+
+    const jobs = await Job.find({
+      ...titleFilter,
+      ...filter,
+    });
+    res.json({data : jobs});
   } catch (error) {
     res.status(500).json({
       message: "Internal Server Error",

@@ -156,4 +156,5 @@ const deleteJobById = async (req, res) => {
     });
   }
 }
+
 module.exports = { createJob, getJobDetailsByID , updateJobDetailsById, deleteJobById};
