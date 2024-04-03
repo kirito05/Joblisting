@@ -19,7 +19,8 @@ router.get("/users", async (req, res) => {
 
 router.get("/jobs", async (req, res) => {
   try {
-    const jobs = await Job.find();
+    const title = req.query.jobTitle || "";
+    const jobs = await Job.find({title : {$regex: "jobTitle",$option:"i"}},{companyName:1, jobTile:1});
     res.json(jobs);
   } catch (error) {
     res.status(500).json({
